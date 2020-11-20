@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Biblioteka</title>
+</head>
+<body>
+    <p><span th:text="${info.name}"></span></p>
+    <p><span th:text="${info.address.street}"/> <span th:text="${info.address.number}"/></p>
+    <p><span th:text="${info.address.city}"/></p>
+    <p>Otwarte od: <span th:text="${info.openingHours.start}"/> do: <span th:text="${info.openingHours.end}"/></p>
+
+    <h3>Dziś jest <span th:text="${date}"></span></h3>
+
+    <div th:replace="fragments/navigation :: navigation"/>
+
+    Dostępne pozycje biblioteczne:
+    <ul>
+        <li th:each="book: ${bookList}">
+            <span th:text="${book}"/>
+        </li>
+    </ul>
+
+    <div th:replace="fragments/navigation :: footer"/>
+
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Biblioteka</title>
+
+   <style>
+       .warning {
+           color: red;
+       }
+   </style>
+
+</head>
+<body>
+
+    <div th:replace="fragments/navigation :: navigation"/>
+
+    <form method="post" th:action="@{/mvc/book/addOrEdit}" th:object="${book}">
+        <input type="hidden" th:field="*{id}"/>
+        Tytuł: <input type="text" required th:field="*{title}">
+        <span class="warning" th:if="${ #fields.hasErrors('title')}" th:errors="*{title}"></span></br>
+        Author: <input type="text" required th:field="*{author}">
+        <span class="warning" th:if="${ #fields.hasErrors('author')}" th:errors="*{author}"></span></br>
+        ISBN: <input type="text" required th:field="*{isbn}">
+        <span class="warning" th:if="${ #fields.hasErrors('isbn')}" th:errors="*{isbn}"></span></br>
+        Rok publikacji: <input type="number" required th:field="*{yearOfPublishment}">
+        <span class="warning" th:if="${ #fields.hasErrors('yearOfPublishment')}" th:errors="*{yearOfPublishment}"></span></br>
+
+        <p th:each="err : ${globalErrors}"><span class="warning" th:text="${err}"/></p>
+
+        <input type="submit" value="Zapisz"/>
+    </form>
+
+    <div th:replace="fragments/navigation :: footer"/>
+</body>
+</html>

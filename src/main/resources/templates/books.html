@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Biblioteka</title>
+
+    <style>
+        .odd {
+            background-color: darkgreen;
+        }
+        .even {
+            background-color: #d26d38;
+        }
+    </style>
+</head>
+<body>
+
+   <div th:replace="fragments/navigation :: navigation"/>
+
+   <a sec:authorize="hasRole('ADMIN')" th:href="@{/mvc/book/add}">Dodaj nową książkę</a>
+
+   <form method="post" th:action="@{/mvc/book/search}" th:object="${params}">
+
+       Tytuł: <input type="text" th:field="*{title}"/></br>
+       Autor: <input type="text" th:field="*{author}"/></br>
+       ISBN: <input type="text" th:field="*{isbn}"/></br>
+       Rok wydania: <input type="number" th:field="*{yearOfPublishment}"/></br>
+
+       <input type="submit" value="Filtruj">
+
+   </form>
+
+   <h4 th:if=" ${ #lists.isEmpty(books) }">Brak książek w bibliotece</h4>
+
+    <table th:if="${books.size() > 0}">
+        <thead>
+        <tr>
+            <td>Tytuł</td>
+            <td>Autor</td>
+            <td>ISBN</td>
+            <td>Rok wydania</td>
+            <td>Liczba egzemplarzy</td>
+            <td>Wypożyczenie od</td>
+            <td>Wypożyczenie do</td>
+            <td>Akcja</td>
+            <td></td>
+            <td></td>
+        </tr>
+        </thead>
+        <tbody>
+            <tr th:each="car, iterStat : ${books}" th:class="${iterStat.isOdd()}? 'odd': 'even'">
+                <td><span th:text="${book.title}"/></td>
+                <td><span th:text="${book.author}"/></td>
+                <td><span th:text="${book.isbn}"/></td>
+                <td><span th:text="${book.yearOfPublishment}"/></td>
+                <td><span th:text="${book.numberOfCopies}"/></td>
+                <td><span th:text="${book.rentedFrom}"/></td>
+                <td><span th:text="${car.rentedTo}"/></td>
+                <td>
+                    <span th:if="${todayDate.isAfter(book.rentedTo)}">Przekroczona data oddania</span>
+                    <span th:unless="${todayDate.isAfter(book.rentedTo)}">Brak potrzebnych akcji</span>
+                </td>
+                <td sec:authorize="hasRole('ADMIN')">
+                    <a th:href="@{/mvc/book/edit/} + ${book.id}">Edytuj</a>
+                </td>
+                <td sec:authorize="hasRole('ADMIN')">
+                    <a th:href="@{/mvc/book/delete/} + ${book.id}">Usuń</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+   <div th:replace="fragments/navigation :: footer"/>
+</body>
+</html>
