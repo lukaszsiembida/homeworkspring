@@ -1,5 +1,6 @@
 package com.lsiembida.homeworkspring.external.book;
 
+import com.lsiembida.homeworkspring.api.model.BookSearchParams;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -10,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface JpaBookRepository extends JpaRepository<BookEntity, Long>, CustomDatebaseBookRepository {
+public interface JpaBookRepository extends JpaRepository<BookEntity, Long> , CustomDatebaseBookRepository {
 
 
     Optional<BookEntity> findByIsbn(String isbn);
@@ -47,5 +48,5 @@ public interface JpaBookRepository extends JpaRepository<BookEntity, Long>, Cust
     @Query("select count(book) from BookEntity book inner join book.rent rent " +
             "where rent.rentedFrom > :date and rent.rentedTo < :date")
     Long countNoRentedAtDate(@Param("date") LocalDate date);
-
+    
 }
